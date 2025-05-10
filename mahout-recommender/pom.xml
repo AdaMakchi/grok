@@ -6,88 +6,118 @@
     <groupId>com.example</groupId>
     <artifactId>mahout-recommender</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>  <!-- Added for WAR packaging -->
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>  <!-- Last Java 8 compatible version -->
+    </parent>
 
     <properties>
-        <!-- Use release instead of source/target for better JDK compatibility -->
         <maven.compiler.release>8</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <!-- Added Spring Boot dependency versions -->
+        <spring-boot.version>2.7.18</spring-boot.version>
     </properties>
 
     <dependencies>
-        <!-- Dépendance pour Apache Mahout -->
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-ui</artifactId>
+    <version>1.7.0</version> <!-- Version compatible avec Spring Boot 2.x -->
+</dependency>
+
+
+
+        <!-- Spring Boot Starter Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Embedded Tomcat for WAR packaging -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Original Dependencies (maintained with exclusions) -->
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-core</artifactId>
             <version>0.9</version>
         </dependency>
 
-        <!-- Explicitly add Guava version compatible with Mahout 0.9 -->
-        <!-- This attempts to override any incompatible version pulled by Cassandra -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>14.0.1</version> <!-- Version known to work with Mahout 0.9 -->
+            <version>14.0.1</version>
         </dependency>
 
-        
-        <!-- Very old Cassandra dependency - likely source of conflicts -->
         <dependency>
             <groupId>org.apache.cassandra</groupId>
             <artifactId>cassandra-all</artifactId>
             <version>0.8.1</version>
-
-        <exclusions>
-            <!-- Exclude Guava from Cassandra if it causes conflicts -->
-            <!-- Let the explicitly added Guava above take precedence -->
-            <!--
-            <exclusion>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-            </exclusion>
-             -->
-            <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-          </exclusion>
-          <exclusion> 
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-          </exclusion>
-        </exclusions>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion> 
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <!-- Add an SLF4J binding to fix the warning -->
+        <!-- Updated SLF4J (Spring Boot uses Logback by default) -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.32</version> <!-- Use a recent 1.7.x version compatible with Mahout/Cassandra -->
-            <scope>runtime</scope> <!-- Usually needed at runtime -->
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.36</version>
         </dependency>
 
-        <!-- Test Dependency (Updated to JUnit 5) -->
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.2</version> <!-- Use a modern JUnit 5 version -->
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Add the JUnit 5 engine dependency for test execution -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Optional: Add launcher if needed by Surefire/Failsafe -->
-        <!-- Not always strictly required but can help resolve issues -->
-        <!--
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>1.10.2</version>
-            <scope>test</scope>
-        </dependency>
-        -->
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.Application</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- WAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

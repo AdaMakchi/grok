@@ -1,1 +1,4 @@
-com\example\App.class
+com\example\service\RecommendationService.class
+com\example\Application.class
+com\example\controller\RecommendationController.class
+com\example\config\SwaggerConfig.class
