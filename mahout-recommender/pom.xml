@@ -14,15 +14,26 @@
         <version>2.7.18</version>  <!-- Last Java 8 compatible version -->
     </parent>
 
+    <repositories>
+    <repository>
+        <id>cloudera</id>
+        <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+    </repository>
+</repositories>
+
     <properties>
-        <maven.compiler.release>8</maven.compiler.release>
+        <maven.compiler.source>1.8</maven.compiler.source>
+<maven.compiler.target>1.8</maven.compiler.target>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <skipTests>true</skipTests>
         
         <!-- Added Spring Boot dependency versions -->
         <spring-boot.version>2.7.18</spring-boot.version>
     </properties>
 
+    
     <dependencies>
 <dependency>
     <groupId>org.springdoc</groupId>
@@ -62,16 +73,18 @@
             <groupId>org.apache.cassandra</groupId>
             <artifactId>cassandra-all</artifactId>
             <version>0.8.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion> 
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-            </exclusions>
+          
+              
+
+    <exclusions>
+        <exclusion>
+            <groupId>*</groupId>
+            <artifactId>*</artifactId>
+        </exclusion>
+    </exclusions>
+
+
+            
         </dependency>
 
         <!-- Updated SLF4J (Spring Boot uses Logback by default) -->

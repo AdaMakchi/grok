@@ -1,0 +1,11 @@
+
+
+services:
+  recommender:
+    build: .
+    ports:
+      - "9090:8080"
+    #volumes:
+    #  - ./data.csv:/data/data.csv  
+    environment:
+      - JAVA_OPTS=-Dserver.port=9090
